@@ -8650,6 +8650,7 @@ class ConstanteService {
     { codigo: 168, descripcion: 'YPANE', departamento: 12 },
     { codigo: 169, descripcion: 'LAMBARE', departamento: 12 },
     { codigo: 170, descripcion: 'J.AUGUSTO SALDIVAR', departamento: 12 },
+    { codigo: 277, descripcion: 'LOMA PYTA', departamento: 12 },
     { codigo: 171, descripcion: 'PILAR', departamento: 13 },
     { codigo: 172, descripcion: 'ALBERDI', departamento: 13 },
     { codigo: 173, descripcion: 'CERRITO', departamento: 13 },
@@ -8710,7 +8711,7 @@ class ConstanteService {
     { codigo: 283, descripcion: 'MARACANA', departamento: 18 },
     { codigo: 284, descripcion: 'PUERTO ADELA', departamento: 18 },
     { codigo: 289, descripcion: 'PUERTO ADELA', departamento: 18 },
-    { codigo: 277, descripcion: 'LOMA PYTA', departamento: 12 },
+    
   ];
 
   departamentos = [
