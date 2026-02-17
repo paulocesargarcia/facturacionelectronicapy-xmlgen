@@ -8710,6 +8710,7 @@ class ConstanteService {
     { codigo: 283, descripcion: 'MARACANA', departamento: 18 },
     { codigo: 284, descripcion: 'PUERTO ADELA', departamento: 18 },
     { codigo: 289, descripcion: 'PUERTO ADELA', departamento: 18 },
+    { codigo: 277, descripcion: 'LOMA PYTA', departamento: 12 },
   ];
 
   departamentos = [
