@@ -1,0 +1,84 @@
+---
+description: Convenções de estilo, lint e testes para o código TypeScript deste projeto
+globs: src/**/*.ts test/**/*.ts
+alwaysApply: false
+---
+
+# Estilo de código TypeScript
+
+## Ferramentas ativas
+
+- **TypeScript**:
+  - Versão: `^3.7.5`.
+  - `tsconfig.json`:
+    - `target`: `es2016`,
+    - `module`: `commonjs`,
+    - `strict`: `true`,
+    - `declaration`: `true`,
+    - `esModuleInterop`: `true`,
+    - `inlineSourceMap`: `true`.
+- **TSLint**:
+  - Configuração: `tslint:recommended` + `tslint-config-prettier`.
+  - Script: `npm run lint`.
+- **Prettier**:
+  - Configuração em `.prettierrc`:
+    - `printWidth`: `120`,
+    - `trailingComma`: `"all"`,
+    - `singleQuote`: `true`.
+  - Script: `npm run format` (aplica em `src/**/*.ts`).
+
+## Convenções de escrita
+
+- **Imports e módulos**
+  - Usar `import`/`export` do TypeScript, compatíveis com `commonjs` de saída.
+  - Evitar `require` dinâmico salvo necessidade específica de Node.
+
+- **Tipos e interfaces**
+  - Tipar parâmetros e retornos sempre que possível.
+  - Preferir **interfaces** para contratos de dados (payloads de DE, itens, eventos, etc.).
+  - Evitar o uso de `any`; quando inevitável, isolar em funções bem documentadas.
+
+- **Nomenclatura**
+  - Manter consistência com a terminologia SIFEN já usada no projeto.
+  - Nomes de funções e métodos em **camelCase**.
+  - Classes e tipos em **PascalCase**.
+  - Constantes em `SCREAMING_SNAKE_CASE` quando globais; ou `camelCase` para variáveis internas.
+
+- **Formatação**
+  - Respeitar largura de linha de 120 colunas (regra do Prettier).
+  - Usar aspas simples (`'`) por padrão.
+  - Habilitar vírgula final (`trailingComma: "all"`) em objetos/arrays multi-linha.
+
+## Estrutura dos arquivos
+
+- **Organização típica**
+  - Imports
+  - Tipos/interfaces
+  - Constantes
+  - Implementação principal (funções, classes, serviços)
+  - Export(s)
+
+- **Serviços**
+  - Centralizar lógica de negócio relacionada em arquivos de serviço (`*.service.ts`).
+  - Evitar funções extremamente longas; extrair partes reutilizáveis para funções auxiliares.
+
+## Testes
+
+- **Ferramentas**:
+  - Mocha + Chai (`npm test` roda `mocha -r ts-node/register 'test/**/*.test.ts'`).
+- **Boas práticas**:
+  - Nomear arquivos de teste como `*.test.ts`.
+  - Espelhar a estrutura de `src/` dentro de `test/` sempre que fizer sentido.
+  - Cobrir:
+    - regras de negócio críticas (cálculo de CDC, totais, validações importantes),
+    - fluxos de geração de XML para tipos de documento/eventos mais usados.
+
+## Diretrizes para o agente
+
+- Antes de sugerir mudanças grandes em estilo, considerar:
+  - compatibilidade com TSLint recomendado,
+  - consistência com o formato atual do código.
+- Para novos arquivos/módulos:
+  - seguir rigorosamente as configurações de TypeScript, TSLint e Prettier descritas aqui,
+  - se possível, incluir testes correspondentes em `test/`.
+

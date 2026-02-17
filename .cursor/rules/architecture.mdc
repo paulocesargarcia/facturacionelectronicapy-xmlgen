@@ -1,0 +1,79 @@
+---
+description: Arquitetura e organização dos módulos do gerador de XML SIFEN
+globs: src/**/*.ts
+alwaysApply: false
+---
+
+# Arquitetura do projeto
+
+## Camadas principais
+
+- **API pública (`src/index.ts`)**
+  - Ponto de entrada do pacote.
+  - Expõe a classe/instância principal responsável por:
+    - receber os dados de entrada (parâmetros e payload JSON),
+    - orquestrar a validação,
+    - acionar os serviços de geração de DE ou eventos,
+    - retornar o XML como string.
+
+- **Serviços de domínio (`src/services/`)**
+  - Cada arquivo em `services/` encapsula uma responsabilidade de domínio:
+    - montagem do documento eletrônico (DE),
+    - montagem dos eventos SIFEN (cancelamento, inutilização, etc.),
+    - cálculo de CDC e dígito verificador,
+    - montagem de itens, transporte, complementos e totais,
+    - validações específicas do manual técnico,
+    - utilitários de datas e strings,
+    - constantes de domínio (países, departamentos, códigos tributários).
+  - O padrão preferido é **service como módulo/coordenador** com funções ou classes especializadas, evitando lógica pesada diretamente no `index.ts`.
+
+- **Utilitários e constantes**
+  - `StringUtil` e `FechaUtil`: funções utilitárias reutilizáveis (normalização de strings, tratamento de datas, etc.).
+  - `constants.service.ts`: centraliza tabelas de códigos e descrições usadas em várias partes do XML.
+
+## Fluxo típico de geração de XML DE
+
+1. **Entrada via API pública**
+   - O consumidor chama `generateXMLDE(params, data, configOpcional)`.
+2. **Normalização e validação**
+   - Normalização de campos (por exemplo, conversão de nomes/formatos).
+   - Validações estruturais e de negócio conforme manual SIFEN.
+3. **Cálculo de chaves e CDC**
+   - Uso de serviços de algoritmo para compor o CDC e dígito verificador.
+4. **Montagem da estrutura JSON do DE**
+   - Serviços especializados montam as seções:
+     - dados de operação,
+     - dados gerais/timbrado,
+     - itens e impostos,
+     - transporte/complementos/documentos associados.
+5. **Conversão JSON → XML**
+   - Utilização de `xml2js` para gerar o XML final a partir da estrutura JSON montada.
+
+## Diretrizes para novas funcionalidades
+
+- **Onde colocar o quê**
+  - Lógica de orquestração de alto nível → `src/index.ts` ou serviço principal do domínio.
+  - Regras de negócio específicas (por tipo de documento/evento) → serviços em `src/services/`.
+  - Funções puras reutilizáveis (transformações, formatações) → utilitários dedicados (`*Util.service.ts` ou arquivo util).
+  - Tabelas e listas de códigos oficiais → `constants.service.ts` (ou arquivo de constantes equivalente).
+
+- **Separação de responsabilidades**
+  - Evite criar “serviços deus” que façam tudo; prefira dividir por subdomínio (itens, totais, transporte, eventos, validações).
+  - Validações complexas devem ser mantidas em módulos próprios de validação para facilitar manutenção quando o manual técnico mudar.
+
+- **Coerência com o manual SIFEN**
+  - Ao implementar ou alterar regras de negócio, inclua comentários sucintos referenciando seções/tabelas do manual técnico quando relevante.
+  - Evite depender de comportamentos implícitos; deixe claro no código de onde vem cada regra (por exemplo: “Tabela 1.2 do manual v150”).
+
+## Boas práticas para o agente
+
+- Ao propor alterações estruturais:
+  - respeitar a separação atual entre API pública, serviços, utilitários e constantes;
+  - manter a granularidade dos serviços (não juntar arquivos diferentes sem forte motivo).
+- Ao criar novos serviços ou utilitários:
+  - seguir o padrão de nomenclatura existente (`jsonDte*.service.ts`, `*Util.service.ts`, etc.);
+  - garantir que novos arquivos sejam incluídos no fluxo de build/test (mesmo `include` do `tsconfig.json`).
+- Ao refatorar:
+  - evitar mudanças que quebrem a assinatura pública de métodos expostos em `index.ts`;
+  - priorizar refatorações internas a `services/` que não modifiquem a API externa.
+

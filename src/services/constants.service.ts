@@ -7556,6 +7556,7 @@ class ConstanteService {
     { codigo: 3808, descripcion: 'LAGUNA VERDE', distrito: 206 },
     { codigo: 3809, descripcion: 'LAS PERLAS', distrito: 206 },
     { codigo: 3810, descripcion: 'LOMA PYTA', distrito: 206 },
+    { codigo: 6428, descripcion: 'LOMA PYTA', distrito: 277 },
     { codigo: 3811, descripcion: 'LOS LAPACHOS', distrito: 206 },
     { codigo: 3812, descripcion: 'LOS MILAGROS', distrito: 206 },
     { codigo: 3813, descripcion: 'MARLENE', distrito: 206 },

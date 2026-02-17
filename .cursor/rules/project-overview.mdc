@@ -1,0 +1,93 @@
+---
+description: Visão geral e contexto do projeto de geração de XML SIFEN em Node/TypeScript
+alwaysApply: true
+---
+
+# Visão geral do projeto
+
+- **Nome do pacote**: `facturacionelectronicapy-xmlgen`
+- **Descrição**: biblioteca Node.js/TypeScript para gerar o XML do Documento Eletrônico exigido pelo SIFEN (Paraguai) a partir de JSON.
+- **Público-alvo**: sistemas de faturação eletrônica que precisam gerar arquivos XML conformes ao manual técnico SIFEN v150.
+
+## Linguagem e stack
+
+- **Linguagem principal**: TypeScript (compilado para Node.js / CommonJS).
+- **Saída publicada**: código compilado em `dist/`, apontado por `main` em `package.json`.
+- **Dependências principais**:
+  - `xml2js`: conversão de objetos JavaScript/JSON para XML.
+  - `fs`: acesso a sistema de arquivos (quando necessário).
+- **Ferramentas de desenvolvimento**:
+  - TypeScript 3.7.x.
+  - TSLint com `tslint:recommended` e `tslint-config-prettier`.
+  - Prettier (configurado via `.prettierrc`).
+  - Mocha/Chai para testes.
+
+## Como usar a biblioteca
+
+- **Importação típica** (lado consumidor):
+
+```typescript
+import xmlgen from 'facturacionelectronicapy-xmlgen';
+
+const xml = await xmlgen.generateXMLDE(params, data, configOpcional);
+```
+
+- **Principais capacidades**:
+  - Geração de XML de Documento Eletrônico (DE) com cálculo automático de CDC.
+  - Geração de XML de eventos SIFEN:
+    - cancelamento
+    - inutilização
+    - conformidade / disconformidade
+    - desconhecimento
+    - notificação
+  - Consultas a constantes de domínio: países, departamentos, distritos, cidades, regimes tributários etc.
+
+## Como rodar e desenvolver
+
+- **Instalação** (como dependência):
+
+```bash
+npm install facturacionelectronicapy-xmlgen
+```
+
+- **Desenvolvimento no próprio repositório**:
+  - `npm run build` — compila TypeScript para `dist/`.
+  - `npm test` — executa testes (Mocha/Chai) em `test/**/*.test.ts`.
+  - `npm run format` — aplica Prettier nos arquivos `src/**/*.ts`.
+  - `npm run lint` — roda TSLint com a configuração do projeto.
+
+## Organização de código (alto nível)
+
+- **`src/index.ts`**:
+  - Exposição da API pública via classe/instância principal (`DE`).
+  - Métodos como `generateXMLDE` e geradores de XML para eventos.
+- **`src/services/`**:
+  - Serviços especializados:
+    - geração do JSON que será convertido em XML (DE e eventos),
+    - cálculos de CDC e dígito verificador,
+    - cálculos de totais e impostos,
+    - montagem de itens, transporte, complementos, documentos associados,
+    - validações conforme manual técnico SIFEN,
+    - utilitários de datas e strings,
+    - constantes (listas de países, departamentos, etc.).
+- **`test/`**:
+  - Testes de unidade/integrados em TypeScript usando Mocha/Chai.
+
+## Convenções gerais para contribuições
+
+- **Idioma de comunicação com o usuário**: respostas do agente devem ser em **português**, salvo se o usuário pedir explicitamente outro idioma.
+- **Idioma do código/comentários**:
+  - manter o padrão existente no projeto (majoritariamente espanhol técnico ligado ao SIFEN),
+  - novos comentários e nomes devem ser consistentes com o contexto (sem misturar muitos idiomas na mesma unidade).
+- **Compatibilidade**:
+  - manter compatibilidade com a versão atual do manual técnico SIFEN suportada pelo projeto (v150, salvo atualização explícita),
+  - não quebrar a API pública exposta por `src/index.ts` sem forte justificativa.
+
+## Quando aplicar esta regra
+
+- Sempre que o agente estiver:
+  - explicando a estrutura do projeto,
+  - adicionando novos módulos/serviços,
+  - atualizando documentação,
+  - ajudando a configurar ou rodar o projeto localmente.
+
