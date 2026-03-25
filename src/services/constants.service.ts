@@ -7356,6 +7356,7 @@ class ConstanteService {
     { codigo: 3636, descripcion: 'CASUALIDAD', distrito: 188 },
     { codigo: 3637, descripcion: 'CEIBO', distrito: 188 },
     { codigo: 3638, descripcion: 'CELADA CUE', distrito: 188 },
+    { codigo: 3639, descripcion: 'CHACO-I', distrito: 188 },
     { codigo: 3640, descripcion: 'CNEL.MARTINEZ', distrito: 188 },
     { codigo: 3641, descripcion: 'COLONIA', distrito: 188 },
     { codigo: 3642, descripcion: 'CMTE.NOWAK', distrito: 188 },
